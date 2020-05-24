@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Шаг 4. Проверяем</h2>
+{% for i in range(0,3) %}
+    <tr>
+        <th>
+            <p class="hide">
+                {{ session["coeff"][0] }}*{{ xs[i] }}<sup>3</sup>+
+                {{ session["coeff"][1] }}*{{ xs[i] }}<sup>2</sup>+
+                {{ session["coeff"][2] }}*{{ xs[i] }}<sup>1</sup>+
+                {{ session["coeff"][3] }}*{{ xs[i] }} = {{ session["resp"][i] }}
+            </p>
+        </th>
+    </tr>
+{% endfor %}
+
+<p>Вот и все, теперь попробуй решить что нибудь по сложнеее</p>
+<a href="{{ url_for("index") }}">
+    <button>Перейти в меню</button>
+</a>
+</body>
+</html>

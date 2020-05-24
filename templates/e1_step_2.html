@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <style>
+        body{
+            padding: 20px 15%;
+        }
+        *{
+            max-width: 100%;
+        }
+        th {
+            height: 20px;
+            width: 80px;
+            padding: 0;
+        }
+
+        th > p {
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h2>Шаг 2. Поиск коэфицентов</h2>
+<p>Видимо ты где-то ошибся.Давай вместе пройдемся по шагам и найдем где.</p>
+
+<p>Нам нужно ввести функцию r_f(x,h) которая округляет число x оставляя только h+1 первых значащих цифр,
+    а остальные заменяет на ноль. Пример: r_f(1234567.890,4)=1234500.000 </p>
+
+<p>Для решения алгебраического уравнения n-того порядка методом Лобачевского-Греффе-Данделена нам нужно построить
+    таблицу.</p>
+<p>Запись вида A<sub>(k,l)</sub> означает элемент в строке k и столбце l </p>
+<p>Индексы в таблице начинаются с 0 первая строка таблицы - коэффиценты уравнения
+    Следующие должный строиться по правилу:</p>
+
+<img src="{{ url_for("static",filename = "img/2.3.png") }}" alt="">
+
+<p>Открывай ячейки таблицы по одному</p>
+<table border="1" cellpadding="5">
+
+    {% for row in coeff %}
+
+        <tr>
+            {% for col in row %}
+                <th><p class="hide">{{ col.normalize() }}</p></th>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+<p>Ввод</p>
+{% if session["k"]<=session["coeff_g"] %}
+
+    <form action="{{ url_for("e1_step_2") }}" method="post">
+        <label>A<sub>({{ session["k"] }},{{ session["j"] }})</sub>
+            <input type="text" name="response" id="response" onkeyup="this.value = this.value.replace(/[^E\.\-\+\d]/g,'');">
+        </label>
+        <button type="submit">Проверить</button>
+    </form>
+
+{% endif %}
+    <p>Если все решил
+        <a href="{{ url_for("e1_step_3") }}">
+            <button>Пошли дальше</button>
+        </a>
+    </p>
+
+
+{% if 1 in errors %}
+    Ты забыл умножить на два!
+    <img src="{{ url_for("static",filename="img/2.3_md_1.png") }}" alt="">
+
+
+{% elif 2 in errors %}
+    Ты забыл возвести первый член во 2 степень!
+    <img src="{{ url_for("static",filename="img/2.3_md_2.png") }}" alt="">
+
+
+{% elif 3 in errors %}
+    Ты забыл первый член!
+    <img src="{{ url_for("static",filename="img/2.3_md_3.png") }}" alt="">
+
+
+{% elif 4 in errors %}
+    Ты забыл уножать на минус 1!
+    <img src="{{ url_for("static",filename="img/2.3_md_4.png") }}" alt="">
+
+{% elif not "not" in  errors and request.method == "POST" %}
+    К сожалению я не могу понять где ты ошибся, попробуй решить снова, будь внимательней
+    <p>Вероятно ты взял не те коэффиценты</p>
+{% endif %}
+
+<form action="{{ url_for("restart") }}">
+    <button type="submit">Заново</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var N ={{ N }};
+        $("th>p").css("opacity", "0");
+
+        $(".hide").slice(0, N).removeAttr("class").css("opacity", "1");
+        
+    });
+</script>
+</body>
+</html>

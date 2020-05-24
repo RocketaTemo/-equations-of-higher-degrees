@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            padding: 20px 15%;
+        }
+        * {
+            max-width: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+</head>
+<body>
+<h2>Шаг 1.Ввод</h2>
+
+<p>Перечисли все коэффиценты через запятую.Пример 3x^3 + 6x^2 + 7x + 4 = 0 ==> 3,6,7,4 <br>
+    !!! не забудь ввести членый с нулевым коэффицентом </p>
+<form action="{{ url_for("e1_step_1") }}" method="POST">
+    <label for="response">Коэфиценты :</label>
+    <input type="text" name="response" id="response" required onkeyup="this.value = this.value.replace(/[^\.\-\,\+\d]/g,'');">
+    <button type="submit">Отправить</button>
+</form>
+
+<p>{{ session["messege"] }} </p>
+
+<a href="{{ url_for("e1_step_2") }}">Перейти к обучению</a>
+
+
+</body>
+</html>

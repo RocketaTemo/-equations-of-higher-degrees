@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <style>
+        body {
+            padding: 20px 15%;
+        }
+
+        * {
+            max-width: 100%;
+        }
+
+        th {
+            height: 20px;
+            width: 80px;
+            padding: 0;
+        }
+
+        th > p {
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h2>Шаг 3. Нахождение корней</h2>
+<p>Теперь последний шаг</p>
+
+<p>Нам нужно вычислить иксы по следующей формуле </p>
+
+<img src="{{ url_for("static",filename="img/3.1.png") }}" alt="">
+
+<p>При действительных корнях должно выполняться следующее:</p>
+
+<img src="{{ url_for("static",filename="img/3.2.png") }}" alt="">
+
+<p>,гле v принадлежит {g-1,g}</p>
+
+<p>Елси оно не выполняется для X<sub>l</sub>находить корень надо по следующему правилу:</p>
+<img src="{{ url_for("static",filename="img/3.3.png") }}" alt="">
+<p>Прошу замететь слудующее:</p>
+<ul>
+    <li>Ро вычисляется в квадрате сразу</li>
+    <li>Проверь индексы коэффицентов когда вычисляешь Ро</li>
+    <li>При вычислении альфы искомый X<sub>l</sub> и X<sub>l+1</sub> не входят в сумму</li>
+</ul>
+
+<p>Открывай ячейки таблицы по одному.Округлять до 3 цифр после запятой</p>
+
+<table border="1" cellpadding="5">
+    <tr>
+        {% for i in range(0,3) %}
+            <th>
+                <p class="hide">
+                    {{xs[i]}}
+                </p>
+            </th>
+        {% endfor %}
+    </tr>
+</table>
+
+{% if session["N3"]<4 %}
+
+    <p>Ввод</p>
+    <form action="{{ url_for("e1_step_3") }}" method="post">
+        <label>X<sub>{{ session["N3"] }}</sub> =
+            <input type="text" name="response" id="response"
+                   onkeyup="this.value = this.value.replace(/[^i\.\-\+\d]/g,'');">
+        </label>
+        <button type="submit">Проверить</button>
+    </form>
+{% else %}
+    <p>Осталось проверить полученныем нами результаты</p>
+    <a href="{{ url_for("e1_step_4") }}">
+        <button>Последний шаг</button>
+    </a>
+{% endif %}
+
+{% if 1 in errors %}
+    <p>Имеется в виду 2^g!</p>
+    <img src="{{ url_for("static",filename="img/3.1_md_1.png") }}" alt="">
+{% elif 2 in errors %}
+    <p>Ты забыл взять корень 2^g степени</p>
+    <img src="{{ url_for("static",filename="img/3.1_md_2.png") }}" alt="">
+{% elif 10 in errors %}
+    <p>Ты забыл Ро уже вычисляется во 2 степени</p>
+    <img src="{{ url_for("static",filename="img/3.3_md_1.png") }}" alt="">
+{% elif not "not" in errors and request.method=="POST" %}
+    К сожалению я не могу понять где ты ошибся, попробуй решить снова, будь внимательней
+{% endif %}
+
+<form action="{{ url_for("restart") }}">
+    <button type="submit">Заново</button>
+</form>
+
+
+<script>
+
+    $("th>p").css("opacity", "0");
+    $(document).ready(function () {
+        var N ={{ session["l3"] }};
+        $(".hide").slice(0, N).removeAttr("class").css("opacity", "1");
+    });
+</script>
+</body>
+</html>
